@@ -3,8 +3,13 @@ import 'dart:math';
 
 class AnimatedTextItem extends StatefulWidget {
   final String text;
+  final int delayInSeconds; // 遅延時間を追加
 
-  const AnimatedTextItem({Key? key, required this.text}) : super(key: key);
+  const AnimatedTextItem({
+    Key? key,
+    required this.text,
+    required this.delayInSeconds, // 引数に遅延時間を追加
+  }) : super(key: key);
 
   @override
   _AnimatedTextItemState createState() => _AnimatedTextItemState();
@@ -69,9 +74,9 @@ class _AnimatedTextItemState extends State<AnimatedTextItem> with SingleTickerPr
         setState(() {});
       });
 
-    // 遅延後にアニメーションを開始
+    // 指定された遅延後にアニメーションを開始
     Future.delayed(
-      Duration(seconds: _random.nextInt(5) + 5),
+      Duration(seconds: widget.delayInSeconds),
       () {
         if (mounted) {
           _controller?.forward();
