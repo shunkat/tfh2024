@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:tfh2024/presentation/form/show_form_url_page.dart';
 import 'dart:typed_data' show Uint8List;
 
 import '../display/diplay_pdf_view.dart';
@@ -11,7 +12,16 @@ class PdfViewerArguments {
   PdfViewerArguments({
     required this.pdfData,
     this.fileName,
+    pdfId,
   });
+
+  copyWith({required String pdfId}) {
+    return PdfViewerArguments(
+      pdfData: pdfData,
+      fileName: fileName,
+      pdfId: pdfId,
+    );
+  }
 }
 
 class UploadPdfView extends StatefulWidget {
@@ -45,7 +55,7 @@ class _UploadPdfViewState extends State<UploadPdfView> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => PDFViewerScreen(
+              builder: (context) => ShowFormUrlPage(
                 arguments: PdfViewerArguments(
                   pdfData: pdfData,
                   fileName: fileName,
