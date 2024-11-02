@@ -59,13 +59,13 @@ class _UploadPdfViewState extends State<UploadPdfView> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No file selected')),
+          const SnackBar(content: Text('ファイルが選択されませんでした')),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading PDF: $e')),
+          SnackBar(content: Text('PDFの読み込みエラー: $e')),
         );
       }
     } finally {
@@ -79,79 +79,96 @@ class _UploadPdfViewState extends State<UploadPdfView> {
 
   @override
   Widget build(BuildContext context) {
+    // デバイスのサイズを取得
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+
+    // 白い四角形のサイズを比率で設定
+    final boxWidth = screenWidth * 0.85; // 幅の85%
+    final boxHeight = screenHeight * 0.75; // 高さの75%
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Upload PDF'),
-      ),
-      body: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.withOpacity(0.5),
-                    width: 2,
+      body: Stack(
+        children: <Widget>[
+          // 背景のグラデーション
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.red.withOpacity(0.2),
+                  Colors.redAccent.withOpacity(0.9),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          ),
+          // 中央の白い四角形を配置
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              width: boxWidth, // 幅を比率で設定
+              height: boxHeight, // 高さを比率で設定
+              decoration: BoxDecoration(
+                color: Colors.white, // 背景色を白に設定
+                borderRadius: BorderRadius.circular(15), // 角を丸くする
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.6),
+                    spreadRadius: 5,
+                    blurRadius: 15,
+                    offset: const Offset(15, 15), // 影の位置
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
+                ],
+              ),
+              child: SingleChildScrollView( // スクロール可能にする
                 child: Column(
-                  children: [
-                    Icon(
-                      Icons.upload_file,
-                      size: 64,
-                      color: Colors.blue.withOpacity(0.5),
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    //const SizedBox(height: 20),
+                    Image(
+                      image: AssetImage('images/title.png'),
+                      fit: BoxFit.cover,
+                      width: boxWidth * 0.9, // 幅を比率で設定
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Select PDF file to view',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(height: 60),
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _pickPDF,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(100, 50),
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                        backgroundColor: Colors.white, // 背景色を白に設定
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // 角を丸くする
+                          side: const BorderSide(color: Colors.black, width: 2), // 黒い縁
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Supported format: PDF',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
+                      child: Text(
+                        _isLoading ? 'Loading...' : 'Upload PDF',
+                        style: const TextStyle(
+                          fontSize: 30,
+                          color: Colors.black, // テキストの色を黒に設定
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _isLoading ? null : _pickPDF,
-                  icon: _isLoading
-                      ? Container(
-                          width: 24,
-                          height: 24,
-                          padding: const EdgeInsets.all(2.0),
-                          child: const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 3,
-                          ),
-                        )
-                      : const Icon(Icons.upload_file),
-                  label: Text(_isLoading ? 'Loading...' : 'Upload PDF'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(16),
-                    textStyle: const TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          // 背景GIFを四角形の上に配置
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Image(
+              image: AssetImage('images/dance.gif'),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
