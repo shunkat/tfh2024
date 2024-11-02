@@ -5,6 +5,9 @@ import 'package:tfh2024/presentation/appeal/gif/diagonal_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/gif/left_bottom_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/text/text_flow_appeal.dart';
 
+import '../../data/comment/commentModel.dart';
+import '../../data/comment/commentRepository.dart';
+
 class AppealController extends StatefulWidget {
   final int value;
 
@@ -18,6 +21,7 @@ class AppealController extends StatefulWidget {
 
 class _AppealControllerState extends State<AppealController> {
   final AudioAppeal _audioAppeal = AudioAppeal();
+  final CommentsRepository _repository = CommentsRepository();
 
   @override
   void initState() {
@@ -46,11 +50,14 @@ class _AppealControllerState extends State<AppealController> {
   @override
   Widget build(BuildContext context) {
     switch (widget.value) {
+      // 引数が1の場合、TextFlowAppealWidgetを表示
       case 1:
-        // 引数が1の場合、TextFlowAppealWidgetを表示
         return TextFlowAppealWidget(
           texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
+          minDelay: 0,
+          maxDelay: 5,
         );
+
       case 2:
         // 引数が2の場合、CenterGifAppealWidgetを表示
         return CenterGifAppealWidget(path: 'assets/gif/happy-cat.gif');
@@ -62,12 +69,71 @@ class _AppealControllerState extends State<AppealController> {
         return LeftBottomGifAppealWidget(path: 'assets/gif/happy-cat.gif');
       default:
         // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
-        return Center(
-          child: Text(
-            '数値は ${widget.value} です',
-            style: const TextStyle(fontSize: 24),
-          ),
+        return StreamBuilder<List<Comment>>(
+          stream: _repository.getCommentsForPdf('testpdfId'),
+          builder: (context, snapshot) {
+            final comments = snapshot.data ?? [];
+            final firebaseTexts =
+                comments.map((comment) => comment.content).toList();
+            return TextFlowAppealWidget(
+              texts: firebaseTexts,
+            );
+          },
         );
     }
+  }
+}
+
+class SimpleCommentTest extends StatelessWidget {
+  final int appealValue;
+  final CommentsRepository _repository = CommentsRepository();
+
+  SimpleCommentTest({
+    super.key,
+    required this.appealValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: StreamBuilder<List<Comment>>(
+        // appealValueを文字列に変換してpdfIdとして使用
+        stream: _repository.getCommentsForPdf('testpdfId'),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          final comments = snapshot.data ?? [];
+
+          final commentsText =
+              comments.map((comment) => comment.content).join('\n');
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                commentsText.isEmpty ? 'コメントなし' : commentsText,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _repository.addComment(
+                    'testpdfId',
+                    'テストコメント${DateTime.now()}',
+                  );
+                },
+                child: Text('テストコメント追加'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }

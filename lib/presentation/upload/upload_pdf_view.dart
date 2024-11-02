@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tfh2024/presentation/form/show_form_url_page.dart';
 import 'dart:typed_data' show Uint8List;
 
+import '../../data/comment/commentRepository.dart';
 import '../display/diplay_pdf_view.dart';
 
 class PdfViewerArguments {
@@ -33,9 +34,11 @@ class UploadPdfView extends StatefulWidget {
 
 class _UploadPdfViewState extends State<UploadPdfView> {
   bool _isLoading = false;
+  final CommentsRepository _repository = CommentsRepository();
 
   Future<void> _pickPDF() async {
     try {
+      //await _repository.addComment('testpdfID', 'test');
       setState(() {
         _isLoading = true;
       });
@@ -132,7 +135,8 @@ class _UploadPdfViewState extends State<UploadPdfView> {
                   ),
                 ],
               ),
-              child: SingleChildScrollView( // スクロール可能にする
+              child: SingleChildScrollView(
+                // スクロール可能にする
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -147,11 +151,13 @@ class _UploadPdfViewState extends State<UploadPdfView> {
                       onPressed: _isLoading ? null : _pickPDF,
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(100, 50),
-                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 40),
                         backgroundColor: Colors.white, // 背景色を白に設定
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10), // 角を丸くする
-                          side: const BorderSide(color: Colors.black, width: 2), // 黒い縁
+                          side: const BorderSide(
+                              color: Colors.black, width: 2), // 黒い縁
                         ),
                       ),
                       child: Text(
