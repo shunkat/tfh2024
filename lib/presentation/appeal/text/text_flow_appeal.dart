@@ -4,10 +4,12 @@ import 'package:tfh2024/presentation/appeal/text/components/animated_text_item.d
 
 class TextFlowAppealWidget extends StatelessWidget {
   final List<String> texts;
+  List<String>? firebaseTexts;
 
-  const TextFlowAppealWidget({
+  TextFlowAppealWidget({
     super.key,
     required this.texts,
+    this.firebaseTexts,
   });
 
   @override

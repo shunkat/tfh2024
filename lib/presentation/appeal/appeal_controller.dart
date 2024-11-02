@@ -21,6 +21,7 @@ class AppealController extends StatefulWidget {
 
 class _AppealControllerState extends State<AppealController> {
   final AudioAppeal _audioAppeal = AudioAppeal();
+  final CommentsRepository _repository = CommentsRepository();
 
   @override
   void initState() {
@@ -51,8 +52,18 @@ class _AppealControllerState extends State<AppealController> {
     switch (widget.value) {
       case 1:
         // 引数が1の場合、TextFlowAppealWidgetを表示
-        return TextFlowAppealWidget(
-          texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
+        ///todo firebaseからのテキストと元のテキストを表示する
+        return StreamBuilder<List<Comment>>(
+          stream: _repository.getCommentsForPdf('testpdfId'),
+          builder: (context, snapshot) {
+            final comments = snapshot.data ?? [];
+            final firebaseTexts =
+                comments.map((comment) => comment.content).toList();
+
+            return TextFlowAppealWidget(
+              texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
+            );
+          },
         );
       case 2:
         // 引数が2の場合、CenterGifAppealWidgetを表示
