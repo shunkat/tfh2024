@@ -16,9 +16,15 @@ class PDFViewerScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('PDF Viewer'),
       ),
-      body: PdfPreview(
-        build: (format) => _loadPdf(),
-      ),
+      body: Stack(children: [
+        PdfPreview(
+          build: (format) => _loadPdf(),
+        ),
+        Text(
+          'AAAAAAAAAAAA',
+          style: TextStyle(fontSize: 30, color: Colors.black),
+        ),
+      ]),
     );
   }
 }
