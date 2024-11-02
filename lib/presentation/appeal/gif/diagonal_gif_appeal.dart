@@ -15,6 +15,7 @@ class DiagonalGifAppealWidget extends StatefulWidget {
 class _DiagonalGifAppealWidgetState extends State<DiagonalGifAppealWidget> {
   ui.Image? _image;
   bool _isLoading = true;
+  bool _showGif = false; // GIFを表示するかどうかのフラグ
 
   @override
   void initState() {
@@ -22,7 +23,7 @@ class _DiagonalGifAppealWidgetState extends State<DiagonalGifAppealWidget> {
     _loadImage();
   }
 
-  /// Loads the GIF image and retrieves its original dimensions.
+  /// GIF画像をロードし、オリジナルの寸法を取得します。
   Future<void> _loadImage() async {
     final ImageStream stream =
         AssetImage(widget.path).resolve(const ImageConfiguration());
@@ -39,55 +40,74 @@ class _DiagonalGifAppealWidgetState extends State<DiagonalGifAppealWidget> {
       _image = image;
       _isLoading = false;
     });
+
+    // 画像がロードされた後、4秒待ってからGIFを表示
+    Timer(const Duration(seconds: 4), () {
+      setState(() {
+        _showGif = true;
+      });
+
+      // 5秒後にGIFを非表示にする
+      Timer(const Duration(seconds: 5), () {
+        setState(() {
+          _showGif = false;
+        });
+      });
+    });
   }
 
   @override
-Widget build(BuildContext context) {
-  if (_isLoading || _image == null) {
-    // Display a loading indicator while the image is being loaded.
-    return const Center(child: CircularProgressIndicator());
-  }
-
-  // Original dimensions of the GIF image.
-  final imageWidth = _image!.width.toDouble();
-  final imageHeight = _image!.height.toDouble();
-
-  // Dimensions of the screen.
-  final screenWidth = MediaQuery.of(context).size.width;
-  final screenHeight = MediaQuery.of(context).size.height;
-
-  List<Widget> imageWidgets = [];
-
-  // Calculate the number of images needed to reach both left and bottom edges.
-  int nHorizontal = (screenWidth / imageWidth).ceil();
-  int nVertical = (screenHeight / imageHeight).ceil();
-  int n = max(nHorizontal, nVertical);
-
-  // Calculate horizontal and vertical spacing.
-  double hSpacing = (screenWidth - imageWidth) / (n - 1);
-  double vSpacing = (screenHeight - imageHeight) / (n - 1);
-
-  for (int i = 0; i < n; i++) {
-    double leftPosition = screenWidth - imageWidth - i * hSpacing;
-    double topPosition = i * vSpacing;
-
-    // Break the loop if the image is completely out of the screen bounds.
-    if (leftPosition + imageWidth < 0 || topPosition > screenHeight) {
-      break;
+  Widget build(BuildContext context) {
+    if (_isLoading || _image == null) {
+      // 画像がロードされるまでローディングインジケーターを表示
+      return const Center(child: CircularProgressIndicator());
     }
 
-    // Add the Positioned widget for the current image.
-    imageWidgets.add(Positioned(
-      left: leftPosition,
-      top: topPosition,
-      child: Image.asset(
-        widget.path,
-      ),
-    ));
-  }
+    if (!_showGif) {
+      // GIFを表示しない場合は空のコンテナを返す
+      return Container();
+    }
 
-  return Stack(
-    children: imageWidgets,
-  );
-}
+    // GIF画像のオリジナルの寸法
+    final imageWidth = _image!.width.toDouble();
+    final imageHeight = _image!.height.toDouble();
+
+    // 画面の寸法
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    List<Widget> imageWidgets = [];
+
+    // 左端と下端に到達するために必要な画像の数を計算
+    int nHorizontal = (screenWidth / imageWidth).ceil();
+    int nVertical = (screenHeight / imageHeight).ceil();
+    int n = max(nHorizontal, nVertical);
+
+    // 水平方向と垂直方向の間隔を計算
+    double hSpacing = (screenWidth - imageWidth) / (n - 1);
+    double vSpacing = (screenHeight - imageHeight) / (n - 1);
+
+    for (int i = 0; i < n; i++) {
+      double leftPosition = screenWidth - imageWidth - i * hSpacing;
+      double topPosition = i * vSpacing;
+
+      // 画像が画面外に完全に出たらループを抜ける
+      if (leftPosition + imageWidth < 0 || topPosition > screenHeight) {
+        break;
+      }
+
+      // 現在の画像のPositionedウィジェットを追加
+      imageWidgets.add(Positioned(
+        left: leftPosition,
+        top: topPosition,
+        child: Image.asset(
+          widget.path,
+        ),
+      ));
+    }
+
+    return Stack(
+      children: imageWidgets,
+    );
+  }
 }
