@@ -75,8 +75,12 @@ class _AppealControllerState extends State<AppealController> {
             final comments = snapshot.data ?? [];
             final firebaseTexts =
                 comments.map((comment) => comment.content).toList();
+            final commentIds = comments.map((comment) => comment.id).toList();
             return TextFlowAppealWidget(
               texts: firebaseTexts,
+              commentIds: commentIds,
+              onAnimationComplete: (commentId) =>
+                  _repository.deleteComment('testpdfId', commentId),
             );
           },
         );

@@ -4,11 +4,13 @@ import 'dart:math';
 class AnimatedTextItem extends StatefulWidget {
   final String text;
   final int delayInSeconds; // 遅延時間を追加
+  final Future<void> Function()? onAnimationComplete;
 
   const AnimatedTextItem({
     Key? key,
     required this.text,
     required this.delayInSeconds, // 引数に遅延時間を追加
+    this.onAnimationComplete,
   }) : super(key: key);
 
   @override
@@ -130,6 +132,10 @@ class _AnimatedTextItemState extends State<AnimatedTextItem>
 
     if (leftPosition + textWidth <= 0) {
       // テキストが画面外に完全に出たら非表示
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await widget.onAnimationComplete?.call(); // ?. 演算子を使用
+      });
+
       print("test");
       return Container();
     }
