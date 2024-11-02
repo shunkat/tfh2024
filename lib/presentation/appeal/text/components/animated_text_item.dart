@@ -15,7 +15,8 @@ class AnimatedTextItem extends StatefulWidget {
   _AnimatedTextItemState createState() => _AnimatedTextItemState();
 }
 
-class _AnimatedTextItemState extends State<AnimatedTextItem> with SingleTickerProviderStateMixin {
+class _AnimatedTextItemState extends State<AnimatedTextItem>
+    with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   Animation<double>? _animation;
 
@@ -40,7 +41,8 @@ class _AnimatedTextItemState extends State<AnimatedTextItem> with SingleTickerPr
     super.initState();
 
     // 背景色をランダムに選択
-    _backgroundColor = _backgroundColors[_random.nextInt(_backgroundColors.length)];
+    _backgroundColor =
+        _backgroundColors[_random.nextInt(_backgroundColors.length)];
 
     // テキストの幅を計算し、アニメーションを初期化
     WidgetsBinding.instance.addPostFrameCallback((_) {

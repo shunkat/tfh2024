@@ -5,14 +5,6 @@ import 'commentModel.dart';
 class CommentsRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // 特定のPDFに対するコメントの追加
-  Future<void> addComment(String pdfId, String content) async {
-    await _firestore.collection('pdfs').doc(pdfId).collection('comments').add({
-      'content': content,
-      'createdAt': FieldValue.serverTimestamp(),
-    });
-  }
-
   // 特定のPDFのコメントを取得（リアルタイム）
   Stream<List<Comment>> getCommentsForPdf(String pdfId) {
     return _firestore
