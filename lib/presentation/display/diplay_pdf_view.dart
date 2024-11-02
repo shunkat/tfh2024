@@ -100,23 +100,6 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
               backgroundColor: _currentPage > 0 ? Colors.blue : Colors.grey,
               child: const Icon(Icons.navigate_before),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'Page ${_currentPage + 1} of $_totalPages',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ),
             FloatingActionButton(
               onPressed: _currentPage < _totalPages - 1 ? _nextPage : null,
               backgroundColor:
@@ -134,18 +117,19 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
     return Scaffold(
       body: Stack(children: [
         PdfPreview.builder(
-        build: (format) => Future.value(_pdfData),
-        pagesBuilder: (context, pages) {
-          _totalPages = pages.length;
-          return Stack(
-            children: [
-              _buildPageView(pages),
-              _buildNavigationBar(),
-            ],
-          );
-        },
-      ),
-        AppealController(value: 0)
+          useActions: false,
+          build: (format) => Future.value(_pdfData),
+          pagesBuilder: (context, pages) {
+            _totalPages = pages.length;
+            return Stack(
+              children: [
+                _buildPageView(pages),
+                _buildNavigationBar(),
+              ],
+            );
+          },
+        ),
+        AppealController(value: _currentPage)
       ]),
     );
   }
