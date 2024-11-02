@@ -27,7 +27,7 @@ class _ShowFormUrlPageState extends State<ShowFormUrlPage> {
   void initState() {
     super.initState();
     pdfId = _generateRandomId();
-    url = 'http://hogehoge/?pdfid=$pdfId';
+    url = 'https://comment-form.web.app/add.html?id=$pdfId';
   }
 
   String _generateRandomId() {
@@ -37,7 +37,10 @@ class _ShowFormUrlPageState extends State<ShowFormUrlPage> {
 
   void _startPresentation() {
     // pdfIdを引数に追加してPdfViewerScreenを呼び出し
-    final updatedArguments = widget.arguments.copyWith(pdfId: pdfId);
+    final updatedArguments = widget.arguments.copyWith(
+      url: url,
+      pdfId: pdfId,
+    );
     Navigator.push(
       context,
       MaterialPageRoute(

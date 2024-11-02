@@ -10,8 +10,9 @@ import '../../data/comment/commentRepository.dart';
 
 class AppealController extends StatefulWidget {
   final int value;
+  final String pdfId;
 
-  const AppealController({Key? key, required this.value})
+  const AppealController({Key? key, required this.value, required this.pdfId})
       : assert(value >= 0 && value <= 10),
         super(key: key);
 
@@ -70,7 +71,7 @@ class _AppealControllerState extends State<AppealController> {
       default:
         // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
         return StreamBuilder<List<Comment>>(
-          stream: _repository.getCommentsForPdf('testpdfId'),
+          stream: _repository.getCommentsForPdf(widget.pdfId),
           builder: (context, snapshot) {
             final comments = snapshot.data ?? [];
             final firebaseTexts =
@@ -80,7 +81,7 @@ class _AppealControllerState extends State<AppealController> {
               texts: firebaseTexts,
               commentIds: commentIds,
               onAnimationComplete: (commentId) =>
-                  _repository.deleteComment('testpdfId', commentId),
+                  _repository.deleteComment(widget.pdfId, commentId),
             );
           },
         );
