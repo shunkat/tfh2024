@@ -59,9 +59,6 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
-  assets:
-    - assets/sample.pdf
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -69,6 +66,7 @@ flutter:
   assets:
     - assets/images/dance.gif
     - assets/images/title.png
+    - assets/sample.pdf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
