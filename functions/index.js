@@ -14,7 +14,9 @@ exports.checkComment = functions.firestore
   .document('pdfs/{pdfId}/comments/{commentId}')
   .onCreate(async (snap, context) => {
     const commentData = snap.data();
-    const text = commentData.content; // 'text'を'content'に変更
+    const text = commentData.content;
+    // pdfIdとcommentIdを取得
+    const pdfId = context.params.pdfId;
 
     try {
       // コメントが盛り上がるかどうかをチェック
@@ -30,19 +32,20 @@ exports.checkComment = functions.firestore
       // goodCommentsコレクションに追加
       try {
         await admin.firestore()
-            .collection('goodComments')
-            .add({
-            ...commentData,
-            content: finalText,
-            });
+        .collection('pdfs')
+        .doc(pdfId)
+        .collection('goodComments')
+        .add({
+          ...commentData,
+          content: finalText,
+        });
         } catch (error) {
-            console.error('Error adding comment to goodComments:', error);
+            console.error('Error adding document:', error);
             throw error;
         }
-
-      console.log('Comment processed and added to goodComments.');
     } catch (error) {
-      console.error('Error processing comment:', error);
+        console.error('Error in checkComment:', error);
+        throw error;
     }
   });
 
