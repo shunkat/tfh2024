@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-class MovingTextWidget extends StatefulWidget {
+class TextFlowAppealWidget extends StatefulWidget {
   final List<String> texts;
 
-  const MovingTextWidget({Key? key, required this.texts}) : super(key: key);
+  const TextFlowAppealWidget({Key? key, required this.texts}) : super(key: key);
 
   @override
-  _MovingTextWidgetState createState() => _MovingTextWidgetState();
+  _TextFlowAppealWidgetState createState() => _TextFlowAppealWidgetState();
 }
 
-class _MovingTextWidgetState extends State<MovingTextWidget>
+class _TextFlowAppealWidgetState extends State<TextFlowAppealWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
