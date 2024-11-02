@@ -43,22 +43,23 @@ class _AppealControllerState extends State<AppealController> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.value == 1) {
-      // 引数が0の場合、MovingTextWidgetを表示
-      return TextFlowAppealWidget(
-        texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
-      );
-    } else if (widget.value == 2) {
-      // 引数が1の場合、CenterGifAppealWidgetを表示
-      return CenterGifAppealWidget(path: 'assets/images/center_appeal.gif');
-    } else {
-      // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
-      return Center(
-        child: Text(
-          '数値は ${widget.value} です',
-          style: const TextStyle(fontSize: 24),
-        ),
-      );
+    switch (widget.value) {
+      case 1:
+        // 引数が1の場合、TextFlowAppealWidgetを表示
+        return TextFlowAppealWidget(
+          texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
+        );
+      case 2:
+        // 引数が2の場合、CenterGifAppealWidgetを表示
+        return CenterGifAppealWidget(path: 'assets/images/center_appeal.gif');
+      default:
+        // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
+        return Center(
+          child: Text(
+            '数値は ${widget.value} です',
+            style: const TextStyle(fontSize: 24),
+          ),
+        );
     }
   }
 }
