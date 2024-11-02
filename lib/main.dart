@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfh2024/presentation/display/diplay_pdf_view.dart';
+import 'package:tfh2024/presentation/upload/upload_pdf_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const PDFViewerScreen(),
+      home: const UploadPdfView(),
     );
   }
 }
