@@ -129,7 +129,10 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
             );
           },
         ),
-        AppealController(value: _currentPage)
+        AppealController(
+          value: _currentPage,
+          pdfId: widget.arguments.pdfId,
+        )
       ]),
     );
   }

@@ -9,14 +9,12 @@ import '../display/diplay_pdf_view.dart';
 class PdfViewerArguments {
   final Uint8List pdfData;
   final String? fileName;
+  final String pdfId;
 
-  PdfViewerArguments({
-    required this.pdfData,
-    this.fileName,
-    pdfId,
-  });
+  PdfViewerArguments(
+      {required this.pdfData, this.fileName, required this.pdfId});
 
-  copyWith({required String pdfId}) {
+  copyWith({required String pdfId, required String url}) {
     return PdfViewerArguments(
       pdfData: pdfData,
       fileName: fileName,
@@ -62,6 +60,7 @@ class _UploadPdfViewState extends State<UploadPdfView> {
                 arguments: PdfViewerArguments(
                   pdfData: pdfData,
                   fileName: fileName,
+                  pdfId: '',
                 ),
               ),
             ),
