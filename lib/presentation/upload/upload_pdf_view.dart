@@ -127,8 +127,8 @@ class _UploadPdfViewState extends State<UploadPdfView> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     //const SizedBox(height: 20),
-                    Image(
-                      image: AssetImage('images/title.png'),
+                    Image.asset(
+                      'assets/images/title.png',
                       fit: BoxFit.cover,
                       width: boxWidth * 0.9, // 幅を比率で設定
                     ),
@@ -161,8 +161,8 @@ class _UploadPdfViewState extends State<UploadPdfView> {
           Positioned(
             left: 0,
             bottom: 0,
-            child: Image(
-              image: AssetImage('images/dance.gif'),
+            child: Image.asset(
+              'assets/images/dance.gif',
             ),
           ),
         ],
@@ -170,5 +170,3 @@ class _UploadPdfViewState extends State<UploadPdfView> {
     );
   }
 }
-
-

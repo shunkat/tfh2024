@@ -22,7 +22,7 @@ class AudioAppeal {
     try {
       debugPrint('Loading sound${value + 1}.mp3');
       // アセットパスを修正
-      await _audioPlayer?.setAsset('sound/sound${value + 1}.mp3');
+      await _audioPlayer?.setAsset('assets/sound/sound${value + 1}.mp3');
       await _audioPlayer?.play();
     } catch (e) {
       debugPrint('Error loading audio: $e');
