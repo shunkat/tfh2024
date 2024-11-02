@@ -128,6 +128,12 @@ class _AnimatedTextItemState extends State<AnimatedTextItem>
       leftPosition = _animation!.value;
     }
 
+    if (leftPosition + textWidth <= 0) {
+      // テキストが画面外に完全に出たら非表示
+      print("test");
+      return Container();
+    }
+
     return Positioned(
       left: leftPosition,
       top: _topPosition,
