@@ -28,12 +28,17 @@ exports.checkComment = functions.firestore
       }
 
       // goodCommentsコレクションに追加
-      await admin.firestore()
-        .collection('goodComments')
-        .add({
-          ...commentData,
-          content: finalText, // 'text'を'content'に変更
-        });
+      try {
+        await admin.firestore()
+            .collection('goodComments')
+            .add({
+            ...commentData,
+            content: finalText,
+            });
+        } catch (error) {
+            console.error('Error adding comment to goodComments:', error);
+            throw error;
+        }
 
       console.log('Comment processed and added to goodComments.');
     } catch (error) {
@@ -51,13 +56,13 @@ async function checkIfExciting(text) {
   ];
 
   try {
-    const response = await openai.createChatCompletion({
-      model: 'gpt-4',
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: messages,
       max_tokens: 10,
     });
 
-    const answer = response.data.choices[0].message.content.trim();
+    const answer = response.choices[0].message.content.trim();
     return answer.includes('はい');
   } catch (error) {
     console.error('Error in checkIfExciting:', error);
@@ -75,13 +80,13 @@ async function makeCommentExciting(text) {
   ];
 
   try {
-    const response = await openai.createChatCompletion({
-      model: 'gpt-4',
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: messages,
       max_tokens: 60,
     });
 
-    return response.data.choices[0].message.content.trim();
+    return response.choices[0].message.content.trim();
   } catch (error) {
     console.error('Error in makeCommentExciting:', error);
     throw error;
