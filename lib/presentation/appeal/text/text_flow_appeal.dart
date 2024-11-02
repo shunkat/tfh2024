@@ -20,7 +20,7 @@ class _TextFlowAppealWidgetState extends State<TextFlowAppealWidget> {
         return _AnimatedTextItem(
           text: text,
           delay: Duration(
-            seconds: _random.nextInt(5) + 5, // 1~5秒間のランダムな遅延
+            seconds: _random.nextInt(5) + 5, // 5~10秒間のランダムな遅延
           ),
         );
       }).toList(),
@@ -70,38 +70,35 @@ class __AnimatedTextItemState extends State<_AnimatedTextItem>
 
     // テキストの幅を計算
     _measureTextWidth();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // 画面の幅と高さを取得
-    final size = MediaQuery.of(context).size;
-    screenWidth = size.width;
-    screenHeight = size.height;
-
-    // ランダムな高さを設定
-    _topPosition = _getRandomTopPosition();
-
-    // アニメーションコントローラーの初期化（5秒間で流れる）
-    _controller = AnimationController(
-      duration: const Duration(seconds: 5),
-      vsync: this,
-    );
-
-    // アニメーションの初期設定
-    _animation = Tween<double>(
-      begin: screenWidth,
-      end: -textWidth,
-    ).animate(_controller!)
-      ..addListener(() {
-        setState(() {});
-      });
 
     // 遅延後にアニメーションを開始
     Future.delayed(widget.delay, () {
       if (!mounted) return;
+
+      // 画面の幅と高さを取得
+      final size = MediaQuery.of(context).size;
+      screenWidth = size.width;
+      screenHeight = size.height;
+
+      // ランダムな高さを設定
+      _topPosition = _getRandomTopPosition();
+
+      // アニメーションコントローラーの初期化（5秒間で流れる）
+      _controller = AnimationController(
+        duration: const Duration(seconds: 5),
+        vsync: this,
+      );
+
+      // アニメーションの初期設定
+      _animation = Tween<double>(
+        begin: screenWidth,
+        end: -textWidth,
+      ).animate(_controller!)
+        ..addListener(() {
+          setState(() {});
+        });
+
+      // アニメーションを開始
       _controller!.forward();
     });
   }
@@ -130,7 +127,7 @@ class __AnimatedTextItemState extends State<_AnimatedTextItem>
 
   @override
   Widget build(BuildContext context) {
-    if (_controller == null || !_controller!.isAnimating && !_controller!.isCompleted) {
+    if (_controller == null || (!_controller!.isAnimating && !_controller!.isCompleted)) {
       // アニメーションがまだ開始されていない場合や、完了した場合は何も表示しない
       return SizedBox.shrink();
     }
