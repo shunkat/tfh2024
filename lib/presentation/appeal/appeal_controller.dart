@@ -50,21 +50,14 @@ class _AppealControllerState extends State<AppealController> {
   @override
   Widget build(BuildContext context) {
     switch (widget.value) {
+      // 引数が1の場合、TextFlowAppealWidgetを表示
       case 1:
-        // 引数が1の場合、TextFlowAppealWidgetを表示
-        ///todo firebaseからのテキストと元のテキストを表示する
-        return StreamBuilder<List<Comment>>(
-          stream: _repository.getCommentsForPdf('testpdfId'),
-          builder: (context, snapshot) {
-            final comments = snapshot.data ?? [];
-            final firebaseTexts =
-                comments.map((comment) => comment.content).toList();
-
-            return TextFlowAppealWidget(
-              texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
-            );
-          },
+        return TextFlowAppealWidget(
+          texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
+          minDelay: 0,
+          maxDelay: 5,
         );
+
       case 2:
         // 引数が2の場合、CenterGifAppealWidgetを表示
         return CenterGifAppealWidget(path: 'assets/gif/happy-cat.gif');
@@ -76,18 +69,16 @@ class _AppealControllerState extends State<AppealController> {
         return LeftBottomGifAppealWidget(path: 'assets/gif/happy-cat.gif');
       default:
         // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
-        return Center(
-          child: Column(
-            children: [
-              Text(
-                '数値は ${widget.value} です',
-                style: const TextStyle(fontSize: 24),
-              ),
-              Expanded(
-                child: SimpleCommentTest(appealValue: widget.value),
-              ),
-            ],
-          ),
+        return StreamBuilder<List<Comment>>(
+          stream: _repository.getCommentsForPdf('testpdfId'),
+          builder: (context, snapshot) {
+            final comments = snapshot.data ?? [];
+            final firebaseTexts =
+                comments.map((comment) => comment.content).toList();
+            return TextFlowAppealWidget(
+              texts: firebaseTexts,
+            );
+          },
         );
     }
   }
