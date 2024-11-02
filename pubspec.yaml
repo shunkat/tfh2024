@@ -67,16 +67,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/dance.gif
-    - assets/images/title.png
-    - assets/sample.pdf
-    - assets/sound/sound1.mp3
-    - assets/sound/sound2.mp3
-    - assets/sound/sound3.mp3
-    - assets/sound/sound4.mp3
-    - assets/sound/sound5.mp3
-    - assets/sound/sound6.mp3
-    - assets/gif/happy-cat.gif
+    - assets/
+    - assets/images/
+    - assets/sound/
+    - assets/gif/
     
   # To add assets to your application, add an assets section, like this:
   # assets:
