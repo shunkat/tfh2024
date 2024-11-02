@@ -131,7 +131,8 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PdfPreview.builder(
+      body: Stack(children: [
+        PdfPreview.builder(
         build: (format) => Future.value(_pdfData),
         pagesBuilder: (context, pages) {
           _totalPages = pages.length;
@@ -143,6 +144,11 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
           );
         },
       ),
+        Text(
+          'AAAAAAAAAAAA',
+          style: TextStyle(fontSize: 30, color: Colors.black),
+        ),
+      ]),
     );
   }
 }
