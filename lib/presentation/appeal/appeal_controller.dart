@@ -68,6 +68,7 @@ class _AppealControllerState extends State<AppealController> {
         return DiagonalGifAppealWidget(path: 'assets/gif/happy-cat.gif');
       case 4:
         // 引数が4の場合、AudioAppealを表示
+        return LeftBottomGifAppealWidget(path: 'assets/gif/dance_man.gif');
       case 5:
         return GifFlowAppealWidget(path: 'assets/gif/dance.gif');
       default:
