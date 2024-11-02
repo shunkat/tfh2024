@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
+import 'package:tfh2024/presentation/appeal/appeal_controller.dart';
 import 'dart:typed_data' show Uint8List;
 
 import '../upload/upload_pdf_view.dart';
@@ -144,10 +145,7 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
           );
         },
       ),
-        Text(
-          'AAAAAAAAAAAA',
-          style: TextStyle(fontSize: 30, color: Colors.black),
-        ),
+        AppealController(value: 0)
       ]),
     );
   }
