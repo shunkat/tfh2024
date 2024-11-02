@@ -18,8 +18,8 @@ class CommentsRepository {
     return _firestore
         .collection('pdfs')
         .doc(pdfId)
-        .collection('comments')
-        .orderBy('createdAt', descending: true)
+        .collection('goodComments')
+        .orderBy('createdAt', descending: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) => Comment.fromFirestore(doc)).toList();
