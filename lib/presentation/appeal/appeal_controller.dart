@@ -5,6 +5,9 @@ import 'package:tfh2024/presentation/appeal/gif/diagonal_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/gif/left_bottom_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/text/text_flow_appeal.dart';
 
+import '../../data/comment/commentModel.dart';
+import '../../data/comment/commentRepository.dart';
+
 class AppealController extends StatefulWidget {
   final int value;
 
@@ -63,11 +66,72 @@ class _AppealControllerState extends State<AppealController> {
       default:
         // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
         return Center(
-          child: Text(
-            '数値は ${widget.value} です',
-            style: const TextStyle(fontSize: 24),
+          child: Column(
+            children: [
+              Text(
+                '数値は ${widget.value} です',
+                style: const TextStyle(fontSize: 24),
+              ),
+              Expanded(
+                child: SimpleCommentTest(appealValue: widget.value),
+              ),
+            ],
           ),
         );
     }
+  }
+}
+
+class SimpleCommentTest extends StatelessWidget {
+  final int appealValue;
+  final CommentsRepository _repository = CommentsRepository();
+
+  SimpleCommentTest({
+    super.key,
+    required this.appealValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: StreamBuilder<List<Comment>>(
+        // appealValueを文字列に変換してpdfIdとして使用
+        stream: _repository.getCommentsForPdf('testpdfId'),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          final comments = snapshot.data ?? [];
+
+          final commentsText =
+              comments.map((comment) => comment.content).join('\n');
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                commentsText.isEmpty ? 'コメントなし' : commentsText,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _repository.addComment(
+                    'testpdfId',
+                    'テストコメント${DateTime.now()}',
+                  );
+                },
+                child: Text('テストコメント追加'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
