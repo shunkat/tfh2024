@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tfh2024/presentation/appeal/audio/audio_appeal.dart';
 import 'package:tfh2024/presentation/appeal/gif/center_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/gif/diagonal_gif_appeal.dart';
+import 'package:tfh2024/presentation/appeal/gif/left_bottom_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/text/text_flow_appeal.dart';
 
 class AppealController extends StatefulWidget {
@@ -56,6 +57,9 @@ class _AppealControllerState extends State<AppealController> {
       case 3:
         // 引数が3の場合、AudioAppealを表示
         return DiagonalGifAppealWidget(path: 'assets/gif/happy-cat.gif');
+      case 4:
+        // 引数が4の場合、AudioAppealを表示
+        return LeftBottomGifAppealWidget(path: 'assets/gif/happy-cat.gif');
       default:
         // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
         return Center(
