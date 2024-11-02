@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfh2024/presentation/appeal/audio/audio_appeal.dart';
+import 'package:tfh2024/presentation/appeal/gif/center_gif_appeal.dart';
 import 'package:tfh2024/presentation/appeal/text/text_flow_appeal.dart';
 
 class AppealController extends StatefulWidget {
@@ -42,11 +43,14 @@ class _AppealControllerState extends State<AppealController> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.value == 0) {
+    if (widget.value == 1) {
       // 引数が0の場合、MovingTextWidgetを表示
       return TextFlowAppealWidget(
-        texts: ['こんにちは', 'おはよう', 'こんばんは'],
+        texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
       );
+    } else if (widget.value == 2) {
+      // 引数が1の場合、CenterGifAppealWidgetを表示
+      return CenterGifAppealWidget(path: 'assets/images/center_appeal.gif');
     } else {
       // その他の数値の場合、適当なウィジェット（ここではTextウィジェット）を表示
       return Center(
