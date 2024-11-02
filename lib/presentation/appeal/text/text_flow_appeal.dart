@@ -10,53 +10,66 @@ class TextFlowAppealWidget extends StatefulWidget {
   _TextFlowAppealWidgetState createState() => _TextFlowAppealWidgetState();
 }
 
-class _TextFlowAppealWidgetState extends State<TextFlowAppealWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+class _TextFlowAppealWidgetState extends State<TextFlowAppealWidget> {
+  final Random _random = Random();
 
-  double screenWidth = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: widget.texts.map((text) {
+        return _AnimatedTextItem(
+          text: text,
+          delay: Duration(
+            seconds: _random.nextInt(5) + 5, // 1~5秒間のランダムな遅延
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _AnimatedTextItem extends StatefulWidget {
+  final String text;
+  final Duration delay;
+
+  const _AnimatedTextItem({Key? key, required this.text, required this.delay})
+      : super(key: key);
+
+  @override
+  __AnimatedTextItemState createState() => __AnimatedTextItemState();
+}
+
+class __AnimatedTextItemState extends State<_AnimatedTextItem>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
+  Animation<double>? _animation;
+
+  late double screenWidth;
+  late double screenHeight;
   double textWidth = 0;
-  double screenHeight = 0;
   double _topPosition = 0;
 
-  int _currentIndex = 0;
   final Random _random = Random();
+
+  late Color _backgroundColor;
+
+  final List<Color> _backgroundColors = [
+    Color(0xFFFFEC6F),
+    Color(0xFFFF7F7F),
+    Color(0xFFD798FF),
+    Color(0xFFFFA73C),
+  ];
 
   @override
   void initState() {
     super.initState();
 
-    // アニメーションコントローラーの初期化
-    _controller = AnimationController(
-      duration: const Duration(seconds: 5),
-      vsync: this,
-    );
+    // 背景色をランダムに選択
+    _backgroundColor =
+        _backgroundColors[_random.nextInt(_backgroundColors.length)];
 
-    // アニメーションのステータスリスナーを追加
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        // 左に流れ終わった後、2秒待ってから再開
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            // 次の文字列に切り替え
-            _currentIndex = (_currentIndex + 1) % widget.texts.length;
-            // ランダムな高さを設定
-            _topPosition = _getRandomTopPosition();
-            // テキストの幅を再計算
-            _measureTextWidth();
-            // アニメーションの範囲を再設定
-            _animation = Tween<double>(
-              begin: screenWidth,
-              end: -textWidth,
-            ).animate(_controller);
-            // アニメーションを再開
-            _controller.reset();
-            _controller.forward();
-          });
-        });
-      }
-    });
+    // テキストの幅を計算
+    _measureTextWidth();
   }
 
   @override
@@ -68,69 +81,77 @@ class _TextFlowAppealWidgetState extends State<TextFlowAppealWidget>
     screenWidth = size.width;
     screenHeight = size.height;
 
-    // 初期のテキストの幅を計算
-    _measureTextWidth();
-
-    // 初期の高さをランダムに設定
+    // ランダムな高さを設定
     _topPosition = _getRandomTopPosition();
+
+    // アニメーションコントローラーの初期化（5秒間で流れる）
+    _controller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    );
 
     // アニメーションの初期設定
     _animation = Tween<double>(
       begin: screenWidth,
       end: -textWidth,
-    ).animate(_controller)
+    ).animate(_controller!)
       ..addListener(() {
         setState(() {});
       });
 
-    // アニメーションを開始
-    _controller.forward();
+    // 遅延後にアニメーションを開始
+    Future.delayed(widget.delay, () {
+      if (!mounted) return;
+      _controller!.forward();
+    });
   }
 
   void _measureTextWidth() {
     final textPainter = TextPainter(
       text: TextSpan(
-        text: widget.texts[_currentIndex],
-        style: const TextStyle(fontSize: 32.0), // 大きな文字サイズ
+        text: widget.text,
+        style: const TextStyle(fontSize: 32.0),
       ),
       maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout();
-
     textWidth = textPainter.size.width;
   }
 
   double _getRandomTopPosition() {
-    // 画面の上部から下部までのランダムな位置を返す
-    return _random.nextDouble() * (screenHeight - 50); // 50はテキストの高さを考慮
+    return _random.nextDouble() * (screenHeight - 50); // テキストの高さを考慮
   }
 
   @override
   void dispose() {
-    // コントローラーの破棄
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: screenHeight,
-      child: Stack(
-        children: [
-          Positioned(
-            left: _animation.value,
-            top: _topPosition,
-            child: Text(
-              widget.texts[_currentIndex],
-              style: const TextStyle(
-                fontSize: 32.0, // 大きな文字サイズ
-                color: Colors.red, // 赤色
-              ),
-            ),
+    if (_controller == null || !_controller!.isAnimating && !_controller!.isCompleted) {
+      // アニメーションがまだ開始されていない場合や、完了した場合は何も表示しない
+      return SizedBox.shrink();
+    }
+
+    return Positioned(
+      left: _animation?.value ?? screenWidth,
+      top: _topPosition,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(13.0),
+        ),
+        child: Text(
+          widget.text,
+          style: const TextStyle(
+            fontSize: 32.0,
+            color: Colors.black,
           ),
-        ],
+        ),
       ),
     );
   }
