@@ -14,8 +14,8 @@ class _AnimatedTextItemState extends State<AnimatedTextItem> with SingleTickerPr
   AnimationController? _controller;
   Animation<double>? _animation;
 
-  late double screenWidth;
-  late double screenHeight;
+  double screenWidth = 0;
+  double screenHeight = 0;
   double textWidth = 0;
   double _topPosition = 0;
 
@@ -60,9 +60,9 @@ class _AnimatedTextItemState extends State<AnimatedTextItem> with SingleTickerPr
       vsync: this,
     );
 
-    // アニメーションの初期設定
+    // アニメーションの初期設定（開始位置をテキストの初期位置に合わせる）
     _animation = Tween<double>(
-      begin: screenWidth,
+      begin: screenWidth - textWidth,
       end: -textWidth,
     ).animate(_controller!)
       ..addListener(() {
@@ -104,18 +104,25 @@ class _AnimatedTextItemState extends State<AnimatedTextItem> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    if (_controller == null || _animation == null) {
-      // アニメーションがまだ初期化されていない場合は何も表示しない
-      return SizedBox.shrink();
+    // 画面サイズが未取得の場合は取得
+    if (screenWidth == 0 || screenHeight == 0) {
+      final size = MediaQuery.of(context).size;
+      screenWidth = size.width;
+      screenHeight = size.height;
+      _topPosition = _getRandomTopPosition();
     }
 
-    if (_controller!.isDismissed || (!_controller!.isAnimating && !_controller!.isCompleted)) {
-      // アニメーションがまだ開始されていない場合や、完了した場合は何も表示しない
-      return SizedBox.shrink();
+    double leftPosition;
+
+    if (_controller == null || _animation == null || _controller!.isDismissed) {
+      // アニメーションがまだ開始されていない場合
+      leftPosition = screenWidth - textWidth; // テキストを右端に配置
+    } else {
+      leftPosition = _animation!.value;
     }
 
     return Positioned(
-      left: _animation!.value,
+      left: leftPosition,
       top: _topPosition,
       child: Container(
         padding: const EdgeInsets.all(8.0),
