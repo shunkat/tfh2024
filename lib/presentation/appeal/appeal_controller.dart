@@ -55,11 +55,7 @@ class _AppealControllerState extends State<AppealController> {
 
     switch (widget.value) {
       case 0:
-        mainWidget = TextFlowAppealWidget(
-          texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
-          minDelay: 0,
-          maxDelay: 5,
-        );
+        mainWidget = SizedBox.shrink(); // Do not display TextFlowAppealWidget
         break;
       case 1:
         mainWidget = RightBottomGifAppealWidget(
@@ -98,26 +94,93 @@ class _AppealControllerState extends State<AppealController> {
         mainWidget = SizedBox.shrink(); // Empty widget for default case
     }
 
-    return Stack(
-      children: [
-        mainWidget,
-        // Add the StreamBuilder on top of the mainWidget
-        StreamBuilder<List<Comment>>(
-          stream: _repository.getCommentsForPdf(widget.pdfId),
-          builder: (context, snapshot) {
-            final comments = snapshot.data ?? [];
-            final firebaseTexts =
-                comments.map((comment) => comment.content).toList();
-            final commentIds = comments.map((comment) => comment.id).toList();
-            return TextFlowAppealWidget(
-              texts: firebaseTexts,
-              commentIds: commentIds,
-              onAnimationComplete: (commentId) =>
-                  _repository.deleteComment(widget.pdfId, commentId),
-            );
-          },
+    List<Widget> stackChildren = [mainWidget];
+
+    // Add TextFlowAppealWidget based on the value
+    if (widget.value == 3) {
+      stackChildren.add(
+        TextFlowAppealWidget(
+          texts: [
+            '気になる', '面白そう', 'なんだろ', '草', 'ええやん', '期待', '楽しみ', '興味深い', 'これは', '見たい',
+            '気になる', '何だ', 'わくわく', '面白そう', 'やばい', 'すごい', 'おもしろい', 'いいね', 'いい感じ', '最高'
+          ],
+          minDelay: 0,
+          maxDelay: 5,
         ),
-      ],
+      );
+    } else if (widget.value == 4) {
+      stackChildren.add(
+        TextFlowAppealWidget(
+          texts: [
+            '感動した', 'hotだねぇ〜', 'ええやん', '泣ける', '素晴らしい', '心に響く',
+            '最高', '胸熱', '感激', '鳥肌', '感謝', 'すごい'
+          ],
+          minDelay: 0,
+          maxDelay: 5,
+        ),
+      );
+    } else if (widget.value == 6) {
+      stackChildren.add(
+        TextFlowAppealWidget(
+          texts: [
+            'やられた！', 'まじかよ', 'そういうことだったのか', '驚いた', 'ビックリ',
+            '嘘でしょ', '本当か', '衝撃', 'びっくりした', 'すごい',
+            '信じられない', '驚愕', 'やばい', '何それ', '意外',
+            'マジで', 'まさか', 'えっ', 'すげー', 'すごすぎる'
+          ],
+          minDelay: 0,
+          maxDelay: 5,
+        ),
+      );
+    } else if (widget.value == 8) {
+      stackChildren.add(
+        TextFlowAppealWidget(
+          texts: [
+            'すごい！', '感動した！', '泣いた', '最高すぎる', '鳥肌立った',
+            '涙が止まらない', '感激した', '心打たれた', '感動をありがとう', '人生変わった'
+          ],
+          minDelay: 0,
+          maxDelay: 5,
+        ),
+      );
+    } else if (widget.value == 10) {
+      stackChildren.add(
+        TextFlowAppealWidget(
+          texts: [
+            '乙', '88888888', 'おつかれ', 'おつ！', 'お疲れ様', '888888', 'GJ', 'おつです', '乙乙', 'おつー',
+            'おつかれさま', '8888', 'おつかれ〜', '乙！', 'おつでした', '88888888', '8888', '888', 'おつ！',
+            'お疲れ様でした', '8888888888', 'お疲れ様です', '乙カレー', '888888888', '乙乙乙', '乙でした', 'おつおつ',
+            '乙！', '888888', '88888888', 'おつー', '乙乙', '8888', '888', 'おつです', 'お疲れ', '888888',
+            '88888', '8888888', 'おつかれー', '乙カレー', '88888', '888888', '888888888', 'おつかれ', 'おつ！',
+            '88888888', 'おつかれさま', '8888888888'
+          ],
+          minDelay: 0,
+          maxDelay: 5,
+        ),
+      );
+    }
+
+    // Always add the StreamBuilder on top of the mainWidget
+    stackChildren.add(
+      StreamBuilder<List<Comment>>(
+        stream: _repository.getCommentsForPdf(widget.pdfId),
+        builder: (context, snapshot) {
+          final comments = snapshot.data ?? [];
+          final firebaseTexts =
+              comments.map((comment) => comment.content).toList();
+          final commentIds = comments.map((comment) => comment.id).toList();
+          return TextFlowAppealWidget(
+            texts: firebaseTexts,
+            commentIds: commentIds,
+            onAnimationComplete: (commentId) =>
+                _repository.deleteComment(widget.pdfId, commentId),
+          );
+        },
+      ),
+    );
+
+    return Stack(
+      children: stackChildren,
     );
   }
 }
