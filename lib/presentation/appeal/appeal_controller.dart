@@ -46,86 +46,78 @@ class _AppealControllerState extends State<AppealController> {
   }
 
   Future<void> _initAudio() async {
-    if (widget.value == 1) {
-      await Future.delayed(Duration(seconds: 6));
-      await _audioAppeal.initialize(widget.value);
-    } else if (widget.value == 8) {
-      await Future.delayed(Duration(seconds: 5));
-      await _audioAppeal.initialize(widget.value);
-    } else {
-      await Future.delayed(Duration(seconds: 1));
-      //await _audioAppeal.initialize(widget.value);
+    await _audioAppeal.initialize(widget.value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget mainWidget;
+
+    switch (widget.value) {
+      case 0:
+        mainWidget = TextFlowAppealWidget(
+          texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
+          minDelay: 0,
+          maxDelay: 5,
+        );
+        break;
+      case 1:
+        mainWidget = RightBottomGifAppealWidget(
+          path: 'assets/gif/kyokan.gif',
+          initialDelay: const Duration(seconds: 10),
+          displayDuration: const Duration(seconds: 10),
+        );
+        break;
+      case 2:
+        mainWidget = LeftBottomGifAppealWidget(
+          path: 'assets/gif/awsome.gif',
+          initialDelay: const Duration(seconds: 8),
+          displayDuration: const Duration(seconds: 100),
+        );
+        break;
+      case 3:
+        mainWidget = ThreeGifWidget(
+          path1: 'assets/gif/dance.gif',
+          path2: 'assets/gif/dance_women.gif',
+          path3: 'assets/gif/oji.gif',
+        );
+        break;
+      case 4:
+        mainWidget = DiagonalGifAppealWidget(
+          path: 'assets/gif/happy-cat.gif',
+        );
+        break;
+      case 6:
+        mainWidget = LeftBottomGifAppealWidget(
+          path: 'assets/gif/thatshot.gif',
+          initialDelay: const Duration(seconds: 1),
+          displayDuration: const Duration(seconds: 11),
+        );
+        break;
+      default:
+        mainWidget = SizedBox.shrink(); // Empty widget for default case
     }
-  }
-@override
-Widget build(BuildContext context) {
-  Widget mainWidget;
 
-  switch (widget.value) {
-    case 0:
-      mainWidget = TextFlowAppealWidget(
-        texts: ['こんにちは', 'おはよう', 'こんばんは', "草", "wwwwwwww", "草", "最高"],
-        minDelay: 0,
-        maxDelay: 5,
-      );
-      break;
-    case 1:
-      mainWidget = RightBottomGifAppealWidget(
-        path: 'assets/gif/kyokan.gif',
-        initialDelay: const Duration(seconds: 10),
-        displayDuration: const Duration(seconds: 10),
-      );
-      break;
-    case 2:
-      mainWidget = LeftBottomGifAppealWidget(
-        path: 'assets/gif/awsome.gif',
-        initialDelay: const Duration(seconds: 8),
-        displayDuration: const Duration(seconds: 100),
-      );
-      break;
-    case 3:
-      mainWidget = ThreeGifWidget(
-        path1: 'assets/gif/dance.gif',
-        path2: 'assets/gif/dance_women.gif',
-        path3: 'assets/gif/oji.gif',
-      );
-      break;
-    case 4:
-      mainWidget = DiagonalGifAppealWidget(
-        path: 'assets/gif/happy-cat.gif',
-      );
-      break;
-    case 6:
-      mainWidget = LeftBottomGifAppealWidget(
-        path: 'assets/gif/thatshot.gif',
-        initialDelay: const Duration(seconds: 1),
-        displayDuration: const Duration(seconds: 11),
-      );
-      break;
-    default:
-      mainWidget = SizedBox.shrink(); // Empty widget for default case
+    return Stack(
+      children: [
+        mainWidget,
+        // Add the StreamBuilder on top of the mainWidget
+        StreamBuilder<List<Comment>>(
+          stream: _repository.getCommentsForPdf(widget.pdfId),
+          builder: (context, snapshot) {
+            final comments = snapshot.data ?? [];
+            final firebaseTexts =
+                comments.map((comment) => comment.content).toList();
+            final commentIds = comments.map((comment) => comment.id).toList();
+            return TextFlowAppealWidget(
+              texts: firebaseTexts,
+              commentIds: commentIds,
+              onAnimationComplete: (commentId) =>
+                  _repository.deleteComment(widget.pdfId, commentId),
+            );
+          },
+        ),
+      ],
+    );
   }
-
-  return Stack(
-    children: [
-      mainWidget,
-      // Add the StreamBuilder on top of the mainWidget
-      StreamBuilder<List<Comment>>(
-        stream: _repository.getCommentsForPdf(widget.pdfId),
-        builder: (context, snapshot) {
-          final comments = snapshot.data ?? [];
-          final firebaseTexts =
-              comments.map((comment) => comment.content).toList();
-          final commentIds = comments.map((comment) => comment.id).toList();
-          return TextFlowAppealWidget(
-            texts: firebaseTexts,
-            commentIds: commentIds,
-            onAnimationComplete: (commentId) =>
-                _repository.deleteComment(widget.pdfId, commentId),
-          );
-        },
-      ),
-    ],
-  );
-}
 }
