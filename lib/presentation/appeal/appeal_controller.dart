@@ -48,13 +48,14 @@ class _AppealControllerState extends State<AppealController> {
   Future<void> _initAudio() async {
     if (widget.value == 1) {
       await Future.delayed(Duration(seconds: 6));
+      await _audioAppeal.initialize(widget.value);
     } else if (widget.value == 8) {
       await Future.delayed(Duration(seconds: 5));
+      await _audioAppeal.initialize(widget.value);
     } else {
       await Future.delayed(Duration(seconds: 1));
+      //await _audioAppeal.initialize(widget.value);
     }
-
-    await _audioAppeal.initialize(widget.value);
   }
 @override
 Widget build(BuildContext context) {
