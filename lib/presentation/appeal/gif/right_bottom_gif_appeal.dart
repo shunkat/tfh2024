@@ -54,7 +54,7 @@ class _RightBottomGifAppealWidgetState
     return Container(
       width: double.infinity,
       height: double.infinity,
-      alignment: Alignment.bottomRight, // 右下に配置
+      alignment: Alignment(1.0, 0.8), // 右下に配置
       child: Image.asset(widget.path),
     );
   }
