@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class LeftBottomGifAppealWidget extends StatefulWidget {
+class RightBottomGifAppealWidget extends StatefulWidget {
   final String path;
   final Duration initialDelay;
   final Duration displayDuration;
 
-  const LeftBottomGifAppealWidget({
+  const RightBottomGifAppealWidget({
     Key? key,
     required this.path,
     required this.initialDelay,
@@ -13,11 +13,12 @@ class LeftBottomGifAppealWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LeftBottomGifAppealWidgetState createState() =>
-      _LeftBottomGifAppealWidgetState();
+  _RightBottomGifAppealWidgetState createState() =>
+      _RightBottomGifAppealWidgetState();
 }
 
-class _LeftBottomGifAppealWidgetState extends State<LeftBottomGifAppealWidget> {
+class _RightBottomGifAppealWidgetState
+    extends State<RightBottomGifAppealWidget> {
   bool _isVisible = false; // 初期状態では非表示
 
   @override
@@ -53,7 +54,7 @@ class _LeftBottomGifAppealWidgetState extends State<LeftBottomGifAppealWidget> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      alignment: Alignment.bottomLeft, // 左下に配置
+      alignment: Alignment.bottomRight, // 右下に配置
       child: Image.asset(widget.path),
     );
   }
