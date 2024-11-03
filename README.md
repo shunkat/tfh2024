@@ -1,18 +1,44 @@
 # tfh2024
+## 概要
+プレゼンをもっと盛り上げるために目的で使うツールです。
+
+PDFの形式で読み込ませた発表資料に対して、様々な演出を後付けで追加できます。
+演出の種類としては、GIFアニメーションやテキストアニメーションによる視覚的に盛り上げのほか、Sound Effectを使った音声的な盛り上げも可能です。
+
+また、参加者と盛り上がりを共有するために、発表前に生成されるURLやQRコードから参加者の声を集め、リアルタイムに発表資料に反映することができます。
+
+もし参加者の声が少ない場合には、AIがコメントを生成して盛り上げてくれるので、安心して発表に臨むことができます。
+
+またAIを使い、公序良俗に反したり、ネガティブなコメントは自動で「ホット」なコメントに変換してくれます！
+
+## 背景
+このアプリケーションはTokyo Flutter Hackathon 2024で発表されました。
+
+「どんなにしょぼいプレゼン資料でも
+ホットショーメーカーがHotにしてくれる！
+これでほっと安心だね！」
+
+というコンセプトです。
 
 
-## Getting Started
+# ユーザーシナリオ
+<発表者>
+1. 発表者は発表資料を登録する
+2. QRコードやURLを参加者に共有する
+3. 発表する
 
-This project is a starting point for a Flutter application.
+<参加者>
+1. QRコードやURLを読み取る
+2. コメントで思うことを書く
+3. 発表を楽しむ
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# 使用技術
+- Flutter 3.24.3
+- Firebase
+  - Cloud Functions for Firebase
+  - Firestore
+  - Firebase Hosting
+  - Cloud
 
 
 # ユビキタス言語
