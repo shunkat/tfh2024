@@ -97,13 +97,13 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
           children: [
             FloatingActionButton(
               onPressed: _currentPage > 0 ? _previousPage : null,
-              backgroundColor: _currentPage > 0 ? Colors.blue : Colors.grey,
+              backgroundColor: _currentPage > 0 ? Colors.white : Colors.grey,
               child: const Icon(Icons.navigate_before),
             ),
             FloatingActionButton(
               onPressed: _currentPage < _totalPages - 1 ? _nextPage : null,
               backgroundColor:
-                  _currentPage < _totalPages - 1 ? Colors.blue : Colors.grey,
+                  _currentPage < _totalPages - 1 ? Colors.white : Colors.grey,
               child: const Icon(Icons.navigate_next),
             ),
           ],
