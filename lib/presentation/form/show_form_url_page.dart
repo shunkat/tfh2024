@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:typed_data' show Uint8List;
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tfh2024/presentation/display/diplay_pdf_view.dart';
 import 'package:uuid/uuid.dart';
@@ -11,9 +10,9 @@ class ShowFormUrlPage extends StatefulWidget {
   final PdfViewerArguments arguments;
 
   const ShowFormUrlPage({
-    Key? key,
+    super.key,
     required this.arguments,
-  }) : super(key: key);
+  });
 
   @override
   State<ShowFormUrlPage> createState() => _ShowFormUrlPageState();

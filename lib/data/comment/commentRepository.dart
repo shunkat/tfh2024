@@ -20,7 +20,6 @@ class CommentsRepository {
 
   // コメントの削除
   Future<void> deleteComment(String pdfId, String commentId) async {
-    print('call delete');
     await _firestore
         .collection('pdfs')
         .doc(pdfId)

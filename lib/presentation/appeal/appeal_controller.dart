@@ -13,9 +13,8 @@ class AppealController extends StatefulWidget {
   final int value;
   final String pdfId;
 
-  const AppealController({Key? key, required this.value, required this.pdfId})
-      : assert(value >= 0 && value <= 10),
-        super(key: key);
+  const AppealController({super.key, required this.value, required this.pdfId})
+      : assert(value >= 0 && value <= 10);
 
   @override
   State<AppealController> createState() => _AppealControllerState();

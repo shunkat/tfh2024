@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:tfh2024/presentation/form/show_form_url_page.dart';
 import 'dart:typed_data' show Uint8List;
 
-import '../../data/comment/commentRepository.dart';
-import '../display/diplay_pdf_view.dart';
-
 class PdfViewerArguments {
   final Uint8List pdfData;
   final String? fileName;
@@ -32,11 +29,9 @@ class UploadPdfView extends StatefulWidget {
 
 class _UploadPdfViewState extends State<UploadPdfView> {
   bool _isLoading = false;
-  final CommentsRepository _repository = CommentsRepository();
 
   Future<void> _pickPDF() async {
     try {
-      //await _repository.addComment('testpdfID', 'test');
       setState(() {
         _isLoading = true;
       });
