@@ -94,9 +94,11 @@ Widget build(BuildContext context) {
         path: 'assets/gif/happy-cat.gif',
       );
       break;
-    case 5:
-      mainWidget = GifFlowAppealWidget(
-        path: 'assets/gif/dance.gif',
+    case 6:
+      mainWidget = LeftBottomGifAppealWidget(
+        path: 'assets/gif/thatshot.gif',
+        initialDelay: const Duration(seconds: 1),
+        displayDuration: const Duration(seconds: 11),
       );
       break;
     default:
