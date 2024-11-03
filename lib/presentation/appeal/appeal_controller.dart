@@ -65,7 +65,7 @@ class _AppealControllerState extends State<AppealController> {
         mainWidget = RightBottomGifAppealWidget(
           path: 'assets/gif/kyokan.gif',
           initialDelay: const Duration(seconds: 10),
-          displayDuration: const Duration(seconds: 10),
+          displayDuration: const Duration(seconds: 100),
         );
         break;
       case 2:
@@ -91,7 +91,7 @@ class _AppealControllerState extends State<AppealController> {
         mainWidget = LeftBottomGifAppealWidget(
           path: 'assets/gif/thatshot.gif',
           initialDelay: const Duration(seconds: 1),
-          displayDuration: const Duration(seconds: 11),
+          displayDuration: const Duration(seconds: 100),
         );
         break;
       default:
